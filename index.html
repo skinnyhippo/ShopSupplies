@@ -37,7 +37,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 08:59 AM EDT</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 09:02 AM EDT</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-1">
@@ -70,157 +70,143 @@
             <button class="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-600 ml-2" onclick="closeEmailContent()">Close</button>
     </div>
     <script>
-        try {
-            // Fetch items from external JSON file
-            fetch('items.json')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load items.json');
-                    }
-                    return response.json();
-                })
-                .then(items => {
-                    const itemList = document.getElementById('itemList');
+        (function() {
+            try {
+                // Fetch items from external JSON file
+                fetch('items.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to load items.json');
+                        }
+                        return response.json();
+                    })
+                    .then(items => {
+                        const itemList = document.getElementById('itemList');
 
-                    // Create a row for each item
-                    items.forEach((item, index) => {
-                        const div = document.createElement('div');
-                        div.className = `item p-1 flex items-center space-x-4 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`;
-                        div.dataset.itemName = item.name;
-                        div.innerHTML = `
-                            <div class="w-72 text-right">
-                                <label class="text-sm text-gray-700">${item.name}</label>
-                            </div>
-                            <input type="number" class="quantity w-32 p-1 border rounded focus:ring-2 focus:ring-blue-300 text-sm" min="0" step="1">
-                            <div class="w-40 text-left">
-                                <span class="text-xs text-gray-500">${item.subtext}</span>
-                            </div>
-                        `;
-                        itemList.appendChild(div);
+                        // Create a row for each item
+                        items.forEach((item, index) => {
+                            const div = document.createElement('div');
+                            div.className = `item p-1 flex items-center space-x-4 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`;
+                            div.dataset.itemName = item.name;
+                            div.innerHTML = `
+                                <div class="w-72 text-right">
+                                    <label class="text-sm text-gray-700">${item.name}</label>
+                                </div>
+                                <input type="number" class="quantity w-32 p-1 border rounded focus:ring-2 focus:ring-blue-300 text-sm" min="0" step="1">
+                                <div class="w-40 text-left">
+                                    <span class="text-xs text-gray-500">${item.subtext}</span>
+                                </div>
+                            `;
+                            itemList.appendChild(div);
+                        });
+
+                        // Enable/disable button based on input
+                        const createEmailButton = document.getElementById('createEmail');
+                        const quantities = document.querySelectorAll('.quantity');
+                        const notes = document.getElementById('notes');
+                        const orderBy = document.getElementById('orderBy');
+                        const orderByError = document.getElementById('orderByError');
+
+                        function updateButtonState() {
+                            const hasQuantity = Array.from(quantities).some(input => Number(input.value) > 0);
+                            const hasNotes = notes.value.trim().length > 0;
+                            const isOrderByValid = orderBy.value.trim().length > 0;
+                            createEmailButton.disabled = !(hasQuantity || hasNotes) || !isOrderByValid;
+                            orderByError.classList.toggle('hidden', isOrderByValid);
+                        }
+
+                        quantities.forEach(input => input.addEventListener('input', updateButtonState));
+                        notes.addEventListener('input', updateButtonState);
+                        orderBy.addEventListener('input', updateButtonState);
+                    })
+                    .catch(error => {
+                        console.error('Error loading items:', error);
+                        const itemList = document.getElementById('itemList');
+                        itemList.innerHTML = '<p class="text-red-600 text-center">Error loading items. Please try again later.</p>';
                     });
+            } catch (e) {
+                console.error('External script error (e.g., extension):', e);
+            }
 
-                    // Enable/disable button based on input
-                    const createEmailButton = document.getElementById('createEmail');
-                    const quantities = document.querySelectorAll('.quantity');
-                    const notes = document.getElementById('notes');
+            try {
+                // Form submission
+                document.getElementById('orderForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    console.log('Form submission triggered');
+                    const items = document.querySelectorAll('.item');
                     const orderBy = document.getElementById('orderBy');
                     const orderByError = document.getElementById('orderByError');
+                    const notes = document.getElementById('notes');
+                    const emailOverlay = document.getElementById('emailOverlay');
+                    const emailContent = document.getElementById('emailContent');
+                    const emailTextarea = document.getElementById('emailTextarea');
 
-                    function updateButtonState() {
-                        const hasQuantity = Array.from(quantities).some(input => Number(input.value) > 0);
-                        const hasNotes = notes.value.trim().length > 0;
-                        const isOrderByValid = orderBy.value.trim().length > 0;
-                        createEmailButton.disabled = !(hasQuantity || hasNotes) || !isOrderByValid;
-                        orderByError.classList.toggle('hidden', isOrderByValid);
+                    // Validate Order placed by field
+                    if (!orderBy.value.trim()) {
+                        orderByError.classList.remove('hidden');
+                        console.log('Order placed by validation failed');
+                        return;
+                    } else {
+                        orderByError.classList.add('hidden');
                     }
 
-                    quantities.forEach(input => input.addEventListener('input', updateButtonState));
-                    notes.addEventListener('input', updateButtonState);
-                    orderBy.addEventListener('input', updateButtonState);
-                })
-                .catch(error => {
-                    console.error('Error loading items:', error);
-                    const itemList = document.getElementById('itemList');
-                    itemList.innerHTML = '<p class="text-red-600 text-center">Error loading items. Please try again later.</p>';
-                });
-        } catch (e) {
-            console.error('External script error (e.g., extension):', e);
-        }
+                    let emailBody = "\n"; // Start with a blank line
+                    let hasContent = false;
 
-        try {
-            // Form submission
-            document.getElementById('orderForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-                console.log('Form submission triggered');
-                const items = document.querySelectorAll('.item');
-                const orderBy = document.getElementById('orderBy');
-                const orderByError = document.getElementById('orderByError');
-                const notes = document.getElementById('notes');
-                const emailOverlay = document.getElementById('emailOverlay');
-                const emailContent = document.getElementById('emailContent');
-                const emailTextarea = document.getElementById('emailTextarea');
+                    emailBody += `Order placed by: ${orderBy.value.trim()}\n`;
 
-                // Validate Order placed by field
-                if (!orderBy.value.trim()) {
-                    orderByError.classList.remove('hidden');
-                    console.log('Order placed by validation failed');
-                    return;
-                } else {
-                    orderByError.classList.add('hidden');
-                }
+                    items.forEach(item => {
+                        const itemName = item.dataset.itemName;
+                        const quantity = item.querySelector('.quantity').value;
+                        if (Number(quantity) > 0) {
+                            emailBody += `${itemName}\t${quantity}\n`;
+                            hasContent = true;
+                        }
+                    });
 
-                let emailBody = "\n"; // Start with a blank line
-                let hasContent = false;
-
-                emailBody += `Order placed by: ${orderBy.value.trim()}\n`;
-
-                items.forEach(item => {
-                    const itemName = item.dataset.itemName;
-                    const quantity = item.querySelector('.quantity').value;
-                    if (Number(quantity) > 0) {
-                        emailBody += `${itemName}\t${quantity}\n`;
-                        hasContent = true;
+                    if (!hasContent) {
+                        emailBody += `No quantities entered for reorder\n`;
                     }
-                });
 
-                if (!hasContent) {
-                    emailBody += `No quantities entered for reorder\n`;
-                }
+                    const notesText = notes.value.trim();
+                    if (notesText) {
+                        emailBody += `\nOther Notes: ${notesText}`;
+                    }
 
-                const notesText = notes.value.trim();
-                if (notesText) {
-                    emailBody += `\nOther Notes: ${notesText}`;
-                }
+                    const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
+                    const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+                    console.log('Generated mailto link:', mailtoLink);
 
-                const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
-                const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-                console.log('Generated mailto link:', mailtoLink);
-
-                // Check if mailto is supported
-                function canOpenMailto() {
-                    const a = document.createElement('a');
-                    a.href = 'mailto:';
-                    document.body.appendChild(a);
-                    const supported = a.href.length > 6; // 'mailto' is 6 chars
-                    document.body.removeChild(a);
-                    return supported;
-                }
-
-                if (canOpenMailto()) {
                     try {
                         window.location.href = mailtoLink;
+                        console.log('Attempted to open mailto link');
                     } catch (e) {
                         console.error('Failed to open mailto link:', e);
                         emailOverlay.style.display = 'block';
                         emailContent.style.display = 'block';
                         emailTextarea.value = emailBody;
                     }
-                } else {
-                    console.log('No mailto handler detected');
-                    emailOverlay.style.display = 'block';
-                    emailContent.style.display = 'block';
-                    emailTextarea.value = emailBody;
-                }
-            });
+                });
 
-            // Copy to clipboard function
-            window.copyToClipboard = function() {
-                const textarea = document.getElementById('emailTextarea');
-                textarea.select();
-                document.execCommand('copy');
-                alert('Content copied to clipboard!');
-            };
+                // Copy to clipboard function
+                window.copyToClipboard = function() {
+                    const textarea = document.getElementById('emailTextarea');
+                    textarea.select();
+                    document.execCommand('copy');
+                    alert('Content copied to clipboard!');
+                };
 
-            // Close email content
-            window.closeEmailContent = function() {
-                const emailOverlay = document.getElementById('emailOverlay');
-                const emailContent = document.getElementById('emailContent');
-                emailOverlay.style.display = 'none';
-                emailContent.style.display = 'none';
-            };
-        } catch (e) {
-            console.error('Form submission error (e.g., extension):', e);
-        }
+                // Close email content
+                window.closeEmailContent = function() {
+                    const emailOverlay = document.getElementById('emailOverlay');
+                    const emailContent = document.getElementById('emailContent');
+                    emailOverlay.style.display = 'none';
+                    emailContent.style.display = 'none';
+                };
+            } catch (e) {
+                console.error('Form submission error (e.g., extension):', e);
+            }
+        })();
     </script>
 </body>
 </html>
