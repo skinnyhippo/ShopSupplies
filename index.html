@@ -6,6 +6,16 @@
     <title>Shop Supplies Order Form</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
         .email-popup {
             display: none;
             position: fixed;
@@ -26,21 +36,11 @@
             border: 1px solid #ccc;
             padding: 10px;
         }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 09:35 AM EDT</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 09:47 AM EDT</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-1">
@@ -50,7 +50,7 @@
                 <div class="w-40 text-left font-semibold text-sm text-gray-700">Unit Note</div>
             </div>
             <div id="itemList" class="space-y-1">
-                <!-- Rows will be added by JavaScript -->
+                <!-- Rows added by JavaScript -->
             </div>
             <div class="mt-4">
                 <label for="notes" class="block mb-2 text-gray-700 font-medium">Other Notes or Additional Items:</label>
@@ -68,7 +68,7 @@
         <div id="overlay" class="overlay"></div>
         <div id="emailPopup" class="email-popup">
             <h2 class="text-xl font-bold mb-2">Email Content Backup</h2>
-            <p class="mb-4">If your email client doesn’t open, please copy the content below and paste it into your email client to send the order.</p>
+            <p id="instructions" class="mb-4"></p>
             <textarea id="emailContent" readonly></textarea>
             <div class="mt-4">
                 <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" id="tryOpenEmail">Try Opening Email Client</button>
@@ -80,18 +80,13 @@
     <script>
         (function() {
             try {
-                // Fetch items from external JSON file
                 fetch('items.json')
                     .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Failed to load items.json');
-                        }
+                        if (!response.ok) throw new Error('Failed to load items.json');
                         return response.json();
                     })
                     .then(items => {
                         const itemList = document.getElementById('itemList');
-
-                        // Create a row for each item
                         items.forEach((item, index) => {
                             const div = document.createElement('div');
                             div.className = `item p-1 flex items-center space-x-4 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`;
@@ -108,7 +103,6 @@
                             itemList.appendChild(div);
                         });
 
-                        // Enable/disable button based on input
                         const createEmailButton = document.getElementById('createEmail');
                         const quantities = document.querySelectorAll('.quantity');
                         const notes = document.getElementById('notes');
@@ -129,33 +123,28 @@
                     })
                     .catch(error => {
                         console.error('Error loading items:', error);
-                        const itemList = document.getElementById('itemList');
-                        itemList.innerHTML = '<p class="text-red-600 text-center">Error loading items. Please try again later.</p>';
+                        document.getElementById('itemList').innerHTML = '<p class="text-red-600 text-center">Error loading items. Please try again later.</p>';
                     });
             } catch (e) {
-                console.error('External script error (e.g., extension):', e);
+                console.error('External script error:', e);
             }
 
             try {
-                // Form submission
                 document.getElementById('orderForm').addEventListener('submit', function(event) {
                     event.preventDefault();
-                    console.log('Form submission triggered');
                     const items = document.querySelectorAll('.item');
                     const orderBy = document.getElementById('orderBy');
                     const orderByError = document.getElementById('orderByError');
                     const notes = document.getElementById('notes');
 
-                    // Validate Order placed by field
                     if (!orderBy.value.trim()) {
                         orderByError.classList.remove('hidden');
-                        console.log('Order placed by validation failed');
                         return;
                     } else {
                         orderByError.classList.add('hidden');
                     }
 
-                    let emailBody = "\n"; // Start with a blank line
+                    let emailBody = "\n";
                     let hasContent = false;
 
                     emailBody += `Order placed by: ${orderBy.value.trim()}\n`;
@@ -178,25 +167,19 @@
                         emailBody += `\nOther Notes: ${notesText}`;
                     }
 
-                    const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
+                    const currentDate = new Date().toLocaleDateString();
+                    const subject = `Shop Supplies Order - ${currentDate}`;
                     const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-                    console.log('Generated mailto link:', mailtoLink);
 
-                    // Show popup with options
-                    showPopup(emailBody, mailtoLink);
-                });
-
-                // Show popup with email content and options
-                function showPopup(content, mailtoLink) {
-                    document.getElementById('emailContent').value = content;
+                    document.getElementById('instructions').innerHTML = `Your email client couldn’t be opened automatically. Please copy the content below and paste it into your email client to send the order. Use the following subject: <strong>Shop Supplies Order - ${currentDate}</strong>`;
+                    document.getElementById('emailContent').value = emailBody;
                     document.getElementById('tryOpenEmail').onclick = function() {
                         window.open(mailtoLink, '_blank');
                     };
                     document.getElementById('overlay').style.display = 'block';
                     document.getElementById('emailPopup').style.display = 'block';
-                }
+                });
 
-                // Copy to clipboard function
                 window.copyToClipboard = function() {
                     const textarea = document.getElementById('emailContent');
                     textarea.select();
@@ -204,13 +187,12 @@
                     alert('Content copied to clipboard!');
                 };
 
-                // Close popup
                 window.closePopup = function() {
                     document.getElementById('overlay').style.display = 'none';
                     document.getElementById('emailPopup').style.display = 'none';
                 };
             } catch (e) {
-                console.error('Form submission error (e.g., extension):', e);
+                console.error('Form submission error:', e);
             }
         })();
     </script>
