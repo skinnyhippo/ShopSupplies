@@ -176,8 +176,12 @@
         "subtext": "Case of 6"
     },
     {
-        "name": "PB Blaster Spray Cans",
-        "subtext": "Empty of 1"
+        "name": "PB Blaster/WD40 Sprayers (empty)",
+        "subtext": "Each"
+    },
+    {
+        "name": "PB Blaster",
+        "subtext": "1 Gallon"
     },
     {
         "name": "Pens",
@@ -249,7 +253,7 @@
     },
     {
         "name": "WD 40",
-        "subtext": "-"
+        "subtext": "1 Gallon"
     },
     {
         "name": "Welding Tips/Cones",
