@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/23/25 8:25</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/23/25 8:31</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item. Questions? Contact Ian.</p>
         <form id="orderForm" class="space-y-1">
@@ -24,7 +24,11 @@
                 <label for="notes" class="block mb-2 text-gray-700 font-medium">Other Notes or Additional Items:</label>
                 <textarea id="notes" class="w-full p-3 border rounded focus:ring-2 focus:ring-blue-300" rows="5" placeholder="Enter additional items or notes here..."></textarea>
             </div>
-            <div class="mt-4 text-center">
+            <div class="mt-4 flex items-center justify-center space-x-4">
+                <div>
+                    <label for="orderBy" class="block mb-1 text-gray-700 font-medium text-sm">Order placed by:</label>
+                    <input type="text" id="orderBy" class="w-48 p-2 border rounded focus:ring-2 focus:ring-blue-300 text-sm" required placeholder="Enter your name">
+                </div>
                 <button type="submit" id="createEmail" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 text-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Create Email</button>
             </div>
         </form>
@@ -81,35 +85,33 @@
         // Form submission
         document.getElementById('orderForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            console.log('Form submission triggered');
             const items = document.querySelectorAll('.item');
+            const orderBy = document.getElementById('orderBy').value;
             let emailBody = "\n"; // Start with a blank line
-            let hasContent = false;
+            let hasQuantities = false;
+
+            emailBody += `Order placed by: ${orderBy}\n`;
 
             items.forEach(item => {
                 const itemName = item.dataset.itemName;
                 const quantity = item.querySelector('.quantity').value;
                 if (Number(quantity) > 0) {
                     emailBody += `${itemName}\t${quantity}\n`;
-                    hasContent = true;
+                    hasQuantities = true;
                 }
             });
+
+            if (!hasQuantities) {
+                emailBody += `No quantities entered for reorder\n`;
+            }
 
             const notes = document.getElementById('notes').value;
             if (notes.trim()) {
                 emailBody += `\nOther Notes: ${notes}`;
-                hasContent = true;
-            }
-
-            console.log('Has content:', hasContent);
-            if (!hasContent) {
-                alert('Nothing to create. Please enter at least one quantity or note.');
-                return;
             }
 
             const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
             const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-            console.log('Opening mailto:', mailtoLink);
             window.location.href = mailtoLink;
         });
     </script>
