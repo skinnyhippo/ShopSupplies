@@ -37,7 +37,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 09:02 AM EDT</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 09:06 AM EDT</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-1">
@@ -177,15 +177,18 @@
                     const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
                     console.log('Generated mailto link:', mailtoLink);
 
-                    try {
-                        window.location.href = mailtoLink;
-                        console.log('Attempted to open mailto link');
-                    } catch (e) {
-                        console.error('Failed to open mailto link:', e);
-                        emailOverlay.style.display = 'block';
-                        emailContent.style.display = 'block';
-                        emailTextarea.value = emailBody;
-                    }
+                    // Attempt to open email with delay to avoid extension interference
+                    setTimeout(() => {
+                        try {
+                            window.open(mailtoLink, '_blank');
+                            console.log('Attempted to open mailto link');
+                        } catch (e) {
+                            console.error('Failed to open mailto link:', e);
+                            emailOverlay.style.display = 'block';
+                            emailContent.style.display = 'block';
+                            emailTextarea.value = emailBody;
+                        }
+                    }, 100); // 100ms delay
                 });
 
                 // Copy to clipboard function
