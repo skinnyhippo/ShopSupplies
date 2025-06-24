@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/23/25 08:42 PM EDT</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/23/25 08:46 PM EDT</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-1">
@@ -27,10 +27,10 @@
             <div class="mt-4 flex items-center justify-center space-x-4">
                 <div>
                     <label for="orderBy" class="block mb-1 text-gray-700 font-medium text-sm">Order placed by:</label>
-                    <input type="text" id="orderBy" class="w-48 p-2 border rounded focus:ring-2 focus:ring-blue-300 text-sm" required placeholder="Enter your name">
-                    <div id="orderByError" class="text-red-600 text-sm">Order placed by is required</div>
+                    <input type="text" id="orderBy" class="w-48 p-2 border rounded focus:ring-2 focus:ring-blue-300 text-sm" placeholder="Enter your name">
+                    <div id="orderByError" class="text-red-600 text-sm hidden">Order placed by is required</div>
                 </div>
-                <button type="submit" id="createEmail" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 text-lg font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Create Email</button>
+                <button type="submit" id="createEmail" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 text-lg font-semibold">Create Email</button>
             </div>
         </form>
     </div>
@@ -62,25 +62,6 @@
                     `;
                     itemList.appendChild(div);
                 });
-
-                // Enable/disable button and validate orderBy field
-                const createEmailButton = document.getElementById('createEmail');
-                const quantities = document.querySelectorAll('.quantity');
-                const notes = document.getElementById('notes');
-                const orderBy = document.getElementById('orderBy');
-                const orderByError = document.getElementById('orderByError');
-
-                function updateButtonState() {
-                    const hasQuantity = Array.from(quantities).some(input => Number(input.value) > 0);
-                    const hasNotes = notes.value.trim().length > 0;
-                    const isOrderByValid = orderBy.value.trim().length > 0;
-                    createEmailButton.disabled = !(hasQuantity || hasNotes) || !isOrderByValid;
-                    orderByError.classList.toggle('hidden', isOrderByValid);
-                }
-
-                quantities.forEach(input => input.addEventListener('input', updateButtonState));
-                notes.addEventListener('input', updateButtonState);
-                orderBy.addEventListener('input', updateButtonState);
             })
             .catch(error => {
                 console.error('Error loading items:', error);
@@ -110,8 +91,9 @@
             let hasQuantities = false;
             items.forEach(item => {
                 const itemName = item.dataset.itemName;
-                const quantity = item.querySelector('.quantity').value;
-                if (Number(quantity) > 0) {
+                const quantityInput = item.querySelector('.quantity');
+                const quantity = quantityInput ? Number(quantityInput.value) : 0;
+                if (quantity > 0) {
                     emailBody += `${itemName}\t${quantity}\n`;
                     hasQuantities = true;
                 }
