@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop Supplies Order Form</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            body { margin: 0; }
+            .print-content { display: block !important; }
+            .no-print { display: none !important; }
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 max-w-5xl mt-4 bg-white rounded-lg shadow-md relative">
-        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 08:16 AM EDT</div>
+        <div class="absolute top-4 right-4 text-sm text-gray-500">Last updated 06/24/25 08:20 AM EDT</div>
         <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Shop Supplies Order Form</h1>
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-1">
@@ -30,7 +37,7 @@
                     <input type="text" id="orderBy" class="w-48 p-2 border rounded focus:ring-2 focus:ring-blue-300 text-sm" required placeholder="Enter your name">
                     <div id="orderByError" class="text-red-600 text-sm hidden">Order placed by is required</div>
                 </div>
-                <button type="submit" id="createEmail" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 text-lg font-semibold">Create Email</button>
+                <button type="submit" id="printOrder" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-300 text-lg font-semibold">Print Order</button>
             </div>
         </form>
     </div>
@@ -66,7 +73,7 @@
             .catch(error => {
                 console.error('Error loading items:', error);
                 const itemList = document.getElementById('itemList');
-                itemList.innerHTML = '<p class="text-red-600 text-center'>Error loading items. Please try again later.</p>';
+                itemList.innerHTML = '<p class="text-red-600 text-center">Error loading items. Please try again later.</p>';
             });
 
         // Form submission
@@ -87,8 +94,34 @@
                 orderByError.classList.add('hidden');
             }
 
-            let emailBody = "\n"; // Start with a blank line
-            emailBody += `Order placed by: ${orderBy.value.trim()}\n`;
+            // Generate printable content
+            let printContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Shop Supplies Order</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20mm; }
+                        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                        th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+                        th { background-color: #f2f2f2; }
+                        .no-print { display: none; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Shop Supplies Order</h2>
+                    <p><strong>Order placed by:</strong> ${orderBy.value.trim()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity Requested</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
 
             let hasQuantities = false;
             items.forEach(item => {
@@ -96,34 +129,44 @@
                 const quantityInput = item.querySelector('.quantity');
                 const quantity = quantityInput ? Number(quantityInput.value) : 0;
                 if (quantity > 0) {
-                    emailBody += `${itemName}\t${quantity}\n`;
+                    printContent += `
+                        <tr>
+                            <td>${itemName}</td>
+                            <td>${quantity}</td>
+                        </tr>
+                    `;
                     hasQuantities = true;
                 }
             });
 
             if (!hasQuantities) {
-                emailBody += `No quantities entered for reorder\n`;
+                printContent += `
+                    <tr>
+                        <td colspan="2">No quantities entered for reorder</td>
+                    </tr>
+                `;
             }
+
+            printContent += `
+                        </tbody>
+                    </table>
+            `;
 
             if (notes.value.trim()) {
-                emailBody += `\nOther Notes: ${notes.value.trim()}`;
+                printContent += `<p><strong>Other Notes:</strong> ${notes.value.trim()}</p>`;
             }
 
-            const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
-            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
-            console.log('Generated mailto link:', mailtoLink);
+            printContent += `
+                    <button class="no-print bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onclick="window.print()">Print to PDF</button>
+                    <button class="no-print bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" onclick="window.close()">Close</button>
+                </body>
+                </html>
+            `;
 
-            try {
-                // Test if mailto is supported
-                const a = document.createElement('a');
-                a.href = mailtoLink;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } catch (e) {
-                console.error('Failed to open mailto link:', e);
-                alert('Failed to open email client. Please copy this content manually:\n\n' + emailBody);
-            }
+            // Open a new window with the print content
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
         });
     </script>
 </body>
