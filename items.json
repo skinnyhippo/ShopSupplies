@@ -1,12 +1,270 @@
 [
-    { "name": "Antibac Hand Soap", "subtext": "e.g., bottle" },
-    { "name": "Bank Deposit Bags", "subtext": "e.g., pack of 100" },
-    { "name": "Bankers Boxes", "subtext": "e.g., box" },
-    { "name": "Batteries AA", "subtext": "e.g., pack of 12" },
-    { "name": "Batteries AAA", "subtext": "e.g., pack of 12" },
-    { "name": "Batteries D", "subtext": "e.g., pack of 8" },
-    { "name": "Brake Rotor Gauge", "subtext": "e.g., unit" },
-    { "name": "Brake Test Strips", "subtext": "e.g., pack of 100" },
-    { "name": "Ceramlub", "subtext": "e.g., tube" },
-    { "name": "Coffee", "subtext": "e.g., bag of 1 lb" }
+    {
+        "name": "Soap - Hand Pump Bottle",
+        "subtext": "8oz Bottle"
+    },
+    {
+        "name": "Soap - Refill",
+        "subtext": "16oz Bottle"
+    },
+    {
+        "name": "Bank Deposit Bags",
+        "subtext": "Pack of 25"
+    },
+    {
+        "name": "Bankers Boxes",
+        "subtext": "Each"
+    },
+    {
+        "name": "Batteries AA",
+        "subtext": "Box of 48"
+    },
+    {
+        "name": "Batteries AAA",
+        "subtext": "Box of 48"
+    },
+    {
+        "name": "Batteries C",
+        "subtext": "Each"
+    },
+    {
+        "name": "Batteries D",
+        "subtext": "Each"
+    },
+    {
+        "name": "Brake Rotor Gauge",
+        "subtext": "Each"
+    },
+    {
+        "name": "Brake Test Strips",
+        "subtext": "Tube"
+    },
+    {
+        "name": "Ceramlub (w/ brush)",
+        "subtext": "Each"
+    },
+    {
+        "name": "Coffee Pods - Variety",
+        "subtext": "Pack of 50"
+    },
+    {
+        "name": "Cups 12 oz - Foam ",
+        "subtext": "Case of 1000"
+    },
+    {
+        "name": "Coffee Stirrers",
+        "subtext": "Pack of Approx 250"
+    },
+    {
+        "name": "Copper Gasket Sealant",
+        "subtext": "Tube"
+    },
+    {
+        "name": "Creamer",
+        "subtext": "Pack of Approx 250"
+    },
+    {
+        "name": "Customer Envelopes (Yellow)",
+        "subtext": "Case/Pack"
+    },
+    {
+        "name": "Cutoff Saw Blades - 1\" Arbor",
+        "subtext": "Each"
+    },
+    {
+        "name": "Cutoff Saw Blades - 20mm Arbor",
+        "subtext": "Each"
+    },
+    {
+        "name": "Deposit Slips",
+        "subtext": "Book"
+    },
+    {
+        "name": "Disinfectant Wipes",
+        "subtext": "Tub"
+    },
+    {
+        "name": "Early Bird Envelopes",
+        "subtext": "Pack of 50"
+    },
+    {
+        "name": "Envelopes - Manilla",
+        "subtext": "Pack of 50"
+    },
+    {
+        "name": "Envelopes - Red (New Hire)",
+        "subtext": "Each"
+    },
+    {
+        "name": "Envelopes - White",
+        "subtext": "Box of 500"
+    },
+    {
+        "name": "Garbage Bags (13g)",
+        "subtext": "Box of 200"
+    },
+    {
+        "name": "Garbage Bags (55g)",
+        "subtext": "Box of 25"
+    },
+    {
+        "name": "Gray Gasket Sealant",
+        "subtext": "Tube"
+    },
+    {
+        "name": "Highlighters",
+        "subtext": "Each"
+    },
+    {
+        "name": "Ink - Brother MFC-J995dw - BLACK",
+        "subtext": "Each"
+    },
+    {
+        "name": "Ink - Brother MFC-J995dw - COLORS",
+        "subtext": "Each"
+    },
+    {
+        "name": "Ink - Brother TN660",
+        "subtext": "Case of 4"
+    },
+    {
+        "name": "Ink - Brother TN760",
+        "subtext": "Case of 4"
+    },
+    {
+        "name": "Ink-Brother 3033 MCY",
+        "subtext": "Each"
+    },
+    {
+        "name": "Ink-Brother 3035 Black",
+        "subtext": "Each"
+    },
+    {
+        "name": "Lysol Spray - Disinfectant",
+        "subtext": "Each"
+    },
+    {
+        "name": "Mop Heads",
+        "subtext": "Each"
+    },
+    {
+        "name": "Oil Change Sticker Ink Ribbon",
+        "subtext": "Roll"
+    },
+    {
+        "name": "Oil Change Stickers (Automatic)",
+        "subtext": "Roll"
+    },
+    {
+        "name": "OTC Thermometers",
+        "subtext": "Each"
+    },
+    {
+        "name": "Paper - Credit Card Roll",
+        "subtext": "Pack of 5"
+    },
+    {
+        "name": "Paper - White",
+        "subtext": "Case of 10 Reams"
+    },
+    {
+        "name": "Paper Clips",
+        "subtext": "Pack"
+    },
+    {
+        "name": "Paper Towels",
+        "subtext": "Case of 6"
+    },
+    {
+        "name": "PB Blaster Spray Cans",
+        "subtext": "Empty of 1"
+    },
+    {
+        "name": "Pens",
+        "subtext": "Each"
+    },
+    {
+        "name": "Printer Drums - DR 630",
+        "subtext": "Case of 2"
+    },
+    {
+        "name": "Printer Drums - DR 730",
+        "subtext": "Case of 2"
+    },
+    {
+        "name": "RGA Book",
+        "subtext": "Book"
+    },
+    {
+        "name": "Rubber Bands",
+        "subtext": "Package"
+    },
+    {
+        "name": "Sawzall Blades",
+        "subtext": "Pack of 25 Blades"
+    },
+    {
+        "name": "Seat Covers - Roll",
+        "subtext": "Case of 500"
+    },
+    {
+        "name": "Sharpies - Black",
+        "subtext": "Each"
+    },
+    {
+        "name": "Sharpies - Red",
+        "subtext": "Each"
+    },
+    {
+        "name": "Spray Paint - Black",
+        "subtext": "Each"
+    },
+    {
+        "name": "Staples",
+        "subtext": "Pack"
+    },
+    {
+        "name": "Sugar",
+        "subtext": "Pack of Approx 250"
+    },
+    {
+        "name": "Swiffer WetJet Fluid",
+        "subtext": "Bottle"
+    },
+    {
+        "name": "Swiffer WetJet Pads",
+        "subtext": "Case of 32"
+    },
+    {
+        "name": "Tape - Refill",
+        "subtext": "Roll"
+    },
+    {
+        "name": "Toilet Paper (Jumbo)",
+        "subtext": "Case of 12"
+    },
+    {
+        "name": "Vehicle Floor Mats",
+        "subtext": "Pack of 500"
+    },
+    {
+        "name": "WD 40",
+        "subtext": "-"
+    },
+    {
+        "name": "Welding Tips/Cones",
+        "subtext": "Each"
+    },
+    {
+        "name": "Welding Wire",
+        "subtext": "Each"
+    },
+    {
+        "name": "White Key Tags",
+        "subtext": "-"
+    },
+    {
+        "name": "Yellow Key Tags",
+        "subtext": "-"
+    }
 ]
