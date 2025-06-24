@@ -106,7 +106,7 @@
             }
 
             const subject = `Shop Supplies Order - ${new Date().toLocaleDateString()}`;
-            const mailtoLink = `mailto:your-email@example.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+            const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
             window.location.href = mailtoLink;
         });
     </script>
