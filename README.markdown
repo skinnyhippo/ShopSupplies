@@ -7,7 +7,7 @@ A simple web-based form for managing shop supply orders, allowing users to speci
 This project provides a lightweight HTML form to track and order shop supplies. It fetches item data from an external JSON file, supports user input for quantities and notes, and creates an email with the order details. The form is designed for easy hosting on GitHub Pages.
 
 ## Features
-- Displays a list of 10 shop supplies with quantity fields.
+- Displays a list of shop supplies with quantity fields.
 - Includes a mandatory "Order placed by" field for user identification.
 - Generates an email with order details, including a user name, item quantities, and optional notes.
 - Adds a "No quantities entered for reorder" note if no items are ordered.
@@ -63,9 +63,3 @@ This project provides a lightweight HTML form to track and order shop supplies. 
 - **Update Items**: Edit `items.json` to modify the item list or subtext (e.g., change "e.g., bottle" to specific units like "32 oz bottle").
 - **Adjust Layout**: Modify column widths (e.g., `w-72` for Item) or spacing in `index.html` using Tailwind CSS classes.
 - **Change Date**: Update the "Last updated" text in `index.html` to reflect new versions.
-
-## Contributing
-Feel free to fork this repository, make improvements, and submit pull requests. Suggestions for additional features or bug fixes are welcome!
-
-## License
-This project is open-source under the MIT License (see LICENSE file for details).
