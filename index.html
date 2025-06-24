@@ -13,7 +13,7 @@
         <p class="mb-4 text-gray-600 text-center">Enter the quantity needed for each item.</p>
         <form id="orderForm" class="space-y-2">
             <div class="bg-gray-100 p-3 flex items-center space-x-4 border-b border-gray-300">
-                <div class="w-64 text-right font-semibold text-gray-700">Item</div>
+                <div class="w-84 text-right font-semibold text-gray-700">Item</div>
                 <div class="w-32 text-left font-semibold text-gray-700">Quantity Requested</div>
                 <div class="w-40 text-left font-semibold text-gray-700">Unit Note</div>
             </div>
@@ -47,7 +47,7 @@
                     div.className = `item p-3 flex items-center space-x-4 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`;
                     div.dataset.itemName = item.name;
                     div.innerHTML = `
-                        <div class="w-64 text-right">
+                        <div class="w-84 text-right">
                             <label class="text-gray-700">${item.name}</label>
                         </div>
                         <input type="number" class="quantity w-32 p-2 border rounded focus:ring-2 focus:ring-blue-300" min="0" step="1">
